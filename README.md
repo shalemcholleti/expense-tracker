@@ -8,7 +8,7 @@ Small purchases are easy to forget, making it difficult to know where money goes
 
 ## Solution
 
-Expense Tracker provides a simple menu-driven command-line interface that stores expenses locally in a JSON file. Users can add, view, search, summarize, and delete records without needing a database or internet connection.
+Expense Tracker provides a simple menu-driven command-line interface that stores expenses locally in a JSON file. Users can add, view, search, summarize, edit, and delete records without needing a database or internet connection.
 
 ## Features
 
@@ -17,6 +17,8 @@ Expense Tracker provides a simple menu-driven command-line interface that stores
 - Search by category or description
 - Calculate total spending
 - Show spending grouped by category
+- Edit an expense by ID, including amount, category, and description
+- Show a filtered monthly summary using each expense's saved date
 - Delete an expense by its ID
 - Automatically save data to `data/expenses.json`
 - Validate amounts and required text fields
@@ -24,7 +26,7 @@ Expense Tracker provides a simple menu-driven command-line interface that stores
 ## Tech stack
 
 - **Python 3.9+**
-- Python standard library: `json`, `datetime`, `pathlib`
+- Python standard library: `json`, `datetime`, `pathlib`, `unittest`
 - Local JSON storage
 
 ## How to run
@@ -37,9 +39,19 @@ Expense Tracker provides a simple menu-driven command-line interface that stores
    python3 src/expense_tracker.py
    ```
 
-4. Select an option from the menu. Your data is saved automatically after adding or deleting an expense.
+4. Select an option from the menu. Your data is saved automatically after adding, editing, or deleting an expense.
 
 No third-party packages are required. The included `requirements.txt` is intentionally empty.
+
+## How to run tests
+
+Run the automated test suite from the project root:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+The tests cover ID generation, total spending, category grouping, invalid amount retry handling, monthly filtering, and editing an expense.
 
 ## Screenshots
 
@@ -53,14 +65,33 @@ Example terminal session:
 4. Calculate Total Spending
 5. Spending by Category
 6. Delete Expense
-7. Exit
+7. Edit Expense
+8. Monthly Summary
+9. Exit
 
-Choose an option: 1
-Amount (₹): 450
-Category: Food
-Description: Lunch
+Choose an option: 7
+Enter the expense ID to edit: 3
+Current amount: ₹500.00
+New amount (₹) [500.00]: 650
+Current category: Food
+New category [Food]: Restaurant
+Current description: Lunch
+New description [Lunch]: Dinner
 
-Expense added successfully! (ID: 1)
+Expense updated successfully.
+```
+
+Monthly summary example:
+
+```text
+===== MONTHLY SUMMARY =====
+September 2026
+Total spent: ₹12,450.00
+
+Food         ₹4,200.00
+Transport    ₹2,300.00
+Shopping     ₹3,750.00
+Other        ₹2,200.00
 ```
 
 ## What I learned
@@ -68,18 +99,19 @@ Expense added successfully! (ID: 1)
 - Using variables, input handling, and `if`/`elif`/`else` decisions
 - Repeating a menu with loops
 - Organizing records with lists and dictionaries
+- Modifying nested dictionaries inside a list
+- Filtering records by a date condition
 - Breaking a program into reusable functions
 - Formatting strings for readable terminal output
 - Reading and writing JSON files for simple persistence
+- Writing automated tests with Python's `unittest` module
 - Validating user input and handling errors safely
 
 ## Future improvements
 
-- Edit existing expenses
-- Add date filters and monthly summaries
 - Export data to CSV
 - Add budgets and budget alerts
-- Add automated tests and a richer terminal UI
+- Add richer terminal colors and formatting
 
 ## Project structure
 
@@ -87,7 +119,10 @@ Expense added successfully! (ID: 1)
 project/
 ├── README.md
 ├── src/
+│   ├── __init__.py
 │   └── expense_tracker.py
+├── tests/
+│   └── test_expense_tracker.py
 ├── data/
 │   └── expenses.json
 ├── requirements.txt
